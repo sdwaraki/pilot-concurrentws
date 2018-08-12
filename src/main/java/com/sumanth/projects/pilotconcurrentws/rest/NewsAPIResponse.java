@@ -2,9 +2,11 @@ package com.sumanth.projects.pilotconcurrentws.rest;
 
 import com.sumanth.projects.pilotconcurrentws.model.Article;
 
-public class NewsResponse {
+public class NewsAPIResponse {
 	
 	private String status;
+	
+	private Integer totalResults;
 	
 	private Article[] articles;
 
@@ -16,6 +18,14 @@ public class NewsResponse {
 		this.status = status;
 	}
 
+	public Integer getTotalResults() {
+		return totalResults;
+	}
+
+	public void setTotalResults(Integer totalResults) {
+		this.totalResults = totalResults;
+	}
+
 	public Article[] getArticles() {
 		return articles;
 	}
@@ -23,5 +33,5 @@ public class NewsResponse {
 	public void setArticles(Article[] articles) {
 		this.articles = articles;
 	}
-	
+
 }
