@@ -1,9 +1,27 @@
 package com.sumanth.projects.pilotconcurrentws.service;
 
+import java.util.concurrent.Executor;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExecutorBean {
 	
-	//Create a fixed pool executor and return that executor
+	private Executor executor;
+
+	public ExecutorBean(Executor executor) {
+		super();
+		this.executor = executor;
+	}
+
+	public Executor getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Executor executor) {
+		this.executor = executor;
+	}
+	
+	
+	
 }

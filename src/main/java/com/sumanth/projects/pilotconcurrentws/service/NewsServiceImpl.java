@@ -1,6 +1,9 @@
 package com.sumanth.projects.pilotconcurrentws.service;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,8 +22,18 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	public NewsResponse getNewsBySource(List<String> sources) {
-		List<CompletableFuture<NewsAPIResponse>> futures = sources.stream().map(s -> callNewsApiService.getNews(s)).collect(Collectors.toList());
-		List<NewsAPIResponse> responses = futures.stream().map(r -> r.join()).collect(Collectors.toList());
+		List<NewsAPIResponse> responses = Lists.newArrayList();
+		String queryTerm = getRandomQueryString();
+		List<CompletableFuture<NewsAPIResponse>> futures = sources.stream().map(s -> {
+			try {
+				return callNewsApiService.getNews(s, queryTerm);
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}).collect(Collectors.toList());
+		responses = futures.stream().map(r -> r.join()).collect(Collectors.toList());
 		return convertAPIResponsesToNewsResponse(responses);
  	}
 	
@@ -35,6 +48,19 @@ public class NewsServiceImpl implements NewsService {
 		response.setStatus(status);
 		response.setArticles((Article[]) combinedArticleList.toArray());
 		return response;
+	}
+	
+	public String getRandomQueryString() {
+		List<String> queryTermList = new ArrayList<String>();
+		queryTermList.add("Bitcoin");
+		queryTermList.add("Drake");
+		queryTermList.add("Amazon");
+		queryTermList.add("Trump");
+		queryTermList.add("Samsung");
+		Integer totalSize = queryTermList.size();
+		Random r = new Random();
+		Integer index = r.nextInt(totalSize);
+		return queryTermList.get(index);
 	}
 
 }
