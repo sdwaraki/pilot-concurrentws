@@ -9,12 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.sumanth.projects.pilotconcurrentws.model.Article;
 import com.sumanth.projects.pilotconcurrentws.rest.NewsAPIResponse;
 import com.sumanth.projects.pilotconcurrentws.rest.NewsResponse;
 
+@Service
 public class NewsServiceImpl implements NewsService {
 	
 	@Autowired
@@ -46,7 +48,13 @@ public class NewsServiceImpl implements NewsService {
 			combinedArticleList.addAll(arList);
 		}
 		response.setStatus(status);
-		response.setArticles((Article[]) combinedArticleList.toArray());
+		Article[] arrayArticles = new Article[combinedArticleList.size()];
+		int i=0;
+		for(Article a:combinedArticleList) {
+			arrayArticles[i] =combinedArticleList.get(i);
+			i++;
+		}
+		response.setArticles(arrayArticles);
 		return response;
 	}
 	

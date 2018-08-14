@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.sumanth.projects.pilotconcurrentws.rest.NewsResponse;
 
-@Service
+
 public interface NewsService {
 		
 	public NewsResponse getNewsBySource(List<String> sources);
