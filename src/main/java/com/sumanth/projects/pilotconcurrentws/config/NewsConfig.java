@@ -12,8 +12,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.common.collect.Lists;
+import com.sumanth.projects.pilotconcurrentws.rest.NewsAPIDeserializer;
+import com.sumanth.projects.pilotconcurrentws.rest.NewsAPIResponse;
 import com.sumanth.projects.pilotconcurrentws.service.ExecutorBean;
 
 @Configuration
@@ -40,6 +46,13 @@ public class NewsConfig {
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate(httpRequestFactory());
+		ObjectMapper mapper = new ObjectMapper();
+		SimpleModule module = new SimpleModule();
+		module.addDeserializer(NewsAPIResponse.class, new NewsAPIDeserializer());
+		mapper.registerModule(module);
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		converter.setObjectMapper(mapper);
+		restTemplate.setMessageConverters(Lists.newArrayList(converter));
 		return restTemplate;
 	}
 
